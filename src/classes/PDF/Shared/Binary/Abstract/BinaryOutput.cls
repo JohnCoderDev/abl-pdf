@@ -19,4 +19,6 @@ class classes.PDF.Shared.Binary.Abstract.BinaryOutput abstract:
     method public abstract void putNull(pCount as int64, pPosition as int64).
     method public abstract void appendPointer(pPointer as memptr, pPosition as int64).
     method public abstract void appendFile(pPath as char, pPosition as int64).
+    
+    method public abstract memptr getPointer().
 end class.

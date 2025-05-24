@@ -106,7 +106,7 @@ class classes.PDF.Shared.Binary.Output.Memory inherits BinaryOutput:
         if pStart > pointerEnd then do:
             assign pointerEnd = pStart.
         end.
-        assign pointerEnd = pointerEnd + pSize.
+        assign pointerEnd = pointerEnd + pSize - 1.
     end method.
     
     method protected void allocatePointer(pStart as int64, pSize as int64).
@@ -135,7 +135,7 @@ class classes.PDF.Shared.Binary.Output.Memory inherits BinaryOutput:
             set-size(pointer) = initialSize.    
     end method.
     
-    method public memptr getPointer():
+    method public override memptr getPointer():
         def var resultPointer as memptr no-undo.
         def var i as int64 no-undo.
         assign set-size(resultPointer) = pointerEnd.
