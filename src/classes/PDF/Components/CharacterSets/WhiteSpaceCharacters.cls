@@ -1,4 +1,4 @@
-class classes.PDF.Components.CharacterSet.Sets.WhiteSpaceCharacters:
+class classes.PDF.Components.CharacterSets.WhiteSpaceCharacters:
     def public static property NUL as int init 0x00 no-undo get. // NULL character
     def public static property HT  as int init 0x09 no-undo get. // HORIZONTAL TAB character
     def public static property LF  as int init 0x0a no-undo get. // LINE FEED character

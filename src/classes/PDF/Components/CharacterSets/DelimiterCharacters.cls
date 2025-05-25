@@ -1,4 +1,4 @@
-class classes.PDF.Components.CharacterSet.Sets.DelimiterCharacters:
+class classes.PDF.Components.CharacterSets.DelimiterCharacters:
     def public static property LP       as int init 0x28 no-undo get. // (
     def public static property RP       as int init 0x29 no-undo get. // )
     def public static property LTS      as int init 0x3c no-undo get. // <
