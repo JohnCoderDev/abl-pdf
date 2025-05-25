@@ -19,6 +19,54 @@ class classes.PDF.Types.DictionaryType:
         field entryValue as object
         field valueType as char.
     
+    method public void add(pKey as char, pNumber as int64):
+        this-object:add(pKey, new NumberType(pNumber)).
+    end method.
+    
+    method public void add(pKey as char, pNumber as dec):
+        this-object:add(pKey, new NumberType(pNumber)).
+    end method.
+    
+    method public void add(pKey as char, pLogical as log):
+        this-object:add(pKey, new BooleanType(pLogical)).
+    end method.
+    
+    method public void add(pKey as NameType, pNumber as int64):
+        this-object:add(pKey, new NumberType(pNumber)).
+    end method.
+    
+    method public void add(pKey as NameType, pNumber as dec):
+        this-object:add(pKey, new NumberType(pNumber)).
+    end method.
+    
+    method public void add(pKey as NameType, pLogical as log):
+        this-object:add(pKey, new BooleanType(pLogical)).
+    end method.
+    
+    method public void add(pKey as char, pObject as NameType):
+        this-object:add(new NameType(pKey), pObject).
+    end method.
+    
+    method public void add(pKey as char, pObject as NumberType):
+        this-object:add(new NameType(pKey), pObject).
+    end method.
+    
+    method public void add(pKey as char, pObject as BooleanType):
+        this-object:add(new NameType(pKey), pObject).
+    end method.
+    
+    method public void add(pKey as char, pObject as ArrayType):
+        this-object:add(new NameType(pKey), pObject).
+    end method.
+    
+    method public void add(pKey as char, pObject as StringType):
+        this-object:add(new NameType(pKey), pObject).
+    end method.
+    
+    method public void add(pKey as char, pObject as DictionaryType):
+        this-object:add(new NameType(pKey), pObject).
+    end method.
+    
     method public void add(pKey as NameType, pObject as NameType):
         if not positionKey(pKey) then 
             create entries.
