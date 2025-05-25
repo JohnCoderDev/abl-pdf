@@ -1,6 +1,7 @@
 block-level on error undo, throw.
 using Progress.Lang.* from propath.
 using classes.PDF.Types.* from propath.
+using classes.PDF.Components.* from propath.
 using classes.PDF.Components.CharacterSets.* from propath.
 
 class classes.PDF.Types.DictionaryType:
@@ -67,6 +68,18 @@ class classes.PDF.Types.DictionaryType:
         this-object:add(new NameType(pKey), pObject).
     end method.
     
+    method public void add(pKey as char, pObject as StreamType):
+        this-object:add(new NameType(pKey), pObject).
+    end method.
+    
+    method public void add(pKey as char, pObject as NullObjectType):
+        this-object:add(new NameType(pKey), pObject).
+    end method.
+    
+    method public void add(pKey as char, pObject as IndirectObject):
+        this-object:add(new NameType(pKey), pObject).
+    end method.
+    
     method public void add(pKey as NameType, pObject as NameType):
         if not positionKey(pKey) then 
             create entries.
@@ -122,6 +135,45 @@ class classes.PDF.Types.DictionaryType:
             entries.valueType = 'array'.
     end method.
     
+    method public void add(pKey as NameType, pObject as StreamType):
+        if not positionKey(pKey) then 
+            create entries.
+        assign
+            entries.entryValue = pObject
+            entries.nameString = pKey:toName()
+            entries.valueType = 'stream'.
+    end method.
+    
+    method public void add(pKey as NameType, pObject as NullObjectType):
+        if not positionKey(pKey) then 
+            create entries.
+        assign
+            entries.entryValue = pObject
+            entries.nameString = pKey:toName()
+            entries.valueType = 'null'.
+    end method.
+    
+    method public void add(pKey as NameType, pObject as IndirectObject):
+        if not positionKey(pKey) then 
+            create entries.
+        assign
+            entries.entryValue = pObject
+            entries.nameString = pKey:toName()
+            entries.valueType = 'indirect'.
+    end method.
+    
+    method public object get(pKey as char):
+        if positionKey(pKey) then do:
+            return entries.entryValue.
+        end.
+    end method.
+    
+    method public object get(pKey as NameType):
+        if positionKey(pKey) then do:
+            return entries.entryValue.
+        end.
+    end method.
+    
     method public longchar toDictionary():
         def var stringObject as StringType no-undo.
         def var numberObject as NumberType no-undo.
@@ -129,7 +181,9 @@ class classes.PDF.Types.DictionaryType:
         def var arrayObject as ArrayType no-undo.
         def var booleanObject as BooleanType no-undo.
         def var dictionaryObject as DictionaryType no-undo.
-        
+        def var streamObject as StreamType no-undo.
+        def var nullObject as NullObjectType no-undo.
+        def var indirectObject as IndirectObject no-undo.
         def var resultDictionary as longchar no-undo.
         
         for each entries no-lock:
@@ -177,6 +231,24 @@ class classes.PDF.Types.DictionaryType:
                         dictionaryObject = cast(entries.entryValue, DictionaryType)
                         resultDictionary = substitute('&1&2 &3 ', resultDictionary, entries.nameString, dictionaryObject:toDictionary()).
                 end.
+                
+                when 'stream' then do:
+                    assign 
+                        streamObject = cast(entries.entryValue, StreamType)
+                        resultDictionary = substitute('&1&2 &3 ', resultDictionary, entries.nameString, streamObject:toStream()).
+                end.
+                
+                when 'null' then do:
+                    assign 
+                        nullObject = cast(entries.entryValue, NullObjectType)
+                        resultDictionary = substitute('&1&2 &3 ', resultDictionary, entries.nameString, nullObject:toNull()).
+                end.
+                
+                when 'indirect' then do:
+                    assign 
+                        indirectObject = cast(entries.entryValue, IndirectObject)
+                        resultDictionary = substitute('&1&2 &3 ', resultDictionary, entries.nameString, indirectObject:getReference()).
+                end.
             end case.
         end.
         
@@ -184,6 +256,10 @@ class classes.PDF.Types.DictionaryType:
             assign resultDictionary = substring(resultDictionary, 1, length(resultDictionary) - 1).
         end.    
         return substitute('&1&2&3', leftOpen, resultDictionary, rightClose).
+    end method.
+    
+    method protected log positionKey(pKey as char):
+        return positionKey(new NameType(pKey)).
     end method.
     
     method protected log positionKey(pKey as NameType):

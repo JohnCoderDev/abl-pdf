@@ -20,6 +20,7 @@ class classes.PDF.Types.StreamType:
     
     constructor StreamType(pPath as char):
         assign streamDictionary = new DictionaryType().
+        loadFile(pPath).
     end constructor.
     
     method public void loadFile(pPath as char):
@@ -27,7 +28,18 @@ class classes.PDF.Types.StreamType:
         streamDictionary:add('Length', get-size(pointer)).
     end method.
     
-    method public memptr toStream():
+    method public longchar toStream():
+        def var streamString as longchar no-undo.
+        copy-lob from pointer to streamString.
+        return substitute('&1&2&3&4',
+            streamDictionary:toDictionary(),
+            streamStartIndicator,
+            streamString,
+            streamEndIndicator
+        ).    
+    end method.
+    
+    method public memptr toStreamPointer():
         def var resultStream as memptr no-undo.
         def var streamDictionaryString as longchar no-undo.
         def var streamDictionaryLength as int no-undo.
