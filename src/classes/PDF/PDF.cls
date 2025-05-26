@@ -1,15 +1,18 @@
 block-level on error undo, throw.
 using classes.PDF.Shared.Binary.* from propath.
 using classes.PDF.Components.* from propath.
+using classes.PDF.Configuration.* from propath.
 
 class classes.PDF.PDF:
     def public property writer as BinaryWriter no-undo get. protected set.
     def public property fileStructure as FileStructure no-undo get. protected set.
+    def public property configuration as Configuration no-undo get. protected set.
     
     constructor PDF():
         assign
             writer = new BinaryWriter()
-            fileStructure = new FileStructure(this-object).
+            fileStructure = new FileStructure(this-object)
+            configuration = new Configuration(this-object).
     end constructor.
     
     method public memptr getMemoryFile():
